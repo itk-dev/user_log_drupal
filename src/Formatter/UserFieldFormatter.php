@@ -33,9 +33,6 @@ class UserFieldFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $element = [];
 
-    // $entity = $items->getEntity();
-    // $element['username'] = 'test';
-    // $element['username'] = $entity->get('name')->getValue()[0];
     foreach ($items as $delta => $item) {
       // Render each element as markup.
       $element[$delta] = ['#markup' => '$item->value'];
