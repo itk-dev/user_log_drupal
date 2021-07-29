@@ -28,6 +28,9 @@ class Helper
     }
   }
 
+    /**
+     * Implements hook_views_data().
+     */
   public function viewsData()
   {
     $data = array();
