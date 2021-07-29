@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function itkdev_user_log_schema(){
+    $schema['itkdev_user_log'] = array(
+      'description' => 'Table for ItkDev User Log module.',
+      'fields' => array(
+        'user_delete_log_id' => array(
+          'description' => 'The primary identifier for a user delete log entry.',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'deleted_user_id' => array(
+          'description' => 'The deleted user id.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'deleted_at' => array(
+          'description' => 'The unix timestamp when the user was deleted.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'deleted_by' => array(
+          'description' => 'The acting user id.',
+          'type' => 'int',
+          'not null' => TRUE,
+        ),
+        'deleted_user_name' => array(
+          'description' => 'The deleted user name.',
+          'type' => 'varchar_ascii',
+          'length' => 128,
+          'not null' => TRUE,
+          'default' => '',
+        ),
+        'deleted_user_mail' => array(
+          'description' => 'The deleted user mail.',
+          'type' => 'varchar_ascii',
+          'length' => 128,
+          'not null' => TRUE,
+          'default' => '',
+        ),
+        'deleted_user' => array(
+          'serialize' => TRUE,
+          'type' => 'text',
+          'description' => 'The serialized deleted user.',
+          'size' => 'medium',
+        ),
+
+      ),
+      'primary key' => array('user_delete_log_id'),
+    );
+
+    return $schema;
+}

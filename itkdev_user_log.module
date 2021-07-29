@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Code for module itkdev_user_log
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function itkdev_user_log_user_delete(EntityInterface $entity) {
+  Drupal::service('itkdev_user_log.helper')->userDelete($entity);
+}

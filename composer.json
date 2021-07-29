@@ -1,0 +1,10 @@
+{
+    "name": "itkdev/user_log_drupal",
+    "type": "drupal-module",
+    "authors": [
+        {
+            "name": "Jeppe Kuhlmann Andersen",
+            "email": "jekua@aarhus.dk"
+        }
+    ]
+}
