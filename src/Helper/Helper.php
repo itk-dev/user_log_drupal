@@ -2,24 +2,60 @@
 
 namespace Drupal\itkdev_user_log\Helper;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
 
-class Helper
-{
+/**
+ * Helper for logging user deletion and creating view.
+ */
+class Helper {
+
+  use StringTranslationTrait;
+
+  /**
+   * TimeInterface variable.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  private $time;
+  /**
+   * AccountInterface variable.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  private $account;
+  /**
+   * Connection variable.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  private $database;
+
+  /**
+   * Helper constructor.
+   */
+  public function __construct(AccountInterface $accountInterface, Connection $connection, TimeInterface $timeInterface) {
+    $this->account = $accountInterface;
+    $this->database = $connection;
+    $this->time = $timeInterface;
+
+  }
 
   /**
    * Implements hook_ENTITY_TYPE_delete().
    */
-  public function userDelete(EntityInterface $entity)
-  {
+  public function userDelete(EntityInterface $entity) {
     if ($entity instanceof UserInterface) {
 
-      \Drupal::database()->insert('itkdev_user_log')
+      $this->database->insert('itkdev_user_log')
         ->fields([
           'deleted_user_id' => $entity->id(),
-          'deleted_at' => \Drupal::time()->getCurrentTime(),
-          'deleted_by' => \Drupal::currentUser()->id(),
+          'deleted_at' => $this->time->getCurrentTime(),
+          'deleted_by' => $this->account->id(),
           'deleted_user_name' => $entity->getAccountName(),
           'deleted_user_mail' => $entity->getEmail(),
           'deleted_user' => serialize($entity),
@@ -28,150 +64,150 @@ class Helper
     }
   }
 
-    /**
-     * Implements hook_views_data().
-     */
-  public function viewsData()
-  {
-    $data = array();
-    $data['itkdev_user_log'] = array();
-    $data['itkdev_user_log']['table'] = array();
-    $data['itkdev_user_log']['table']['group'] = t('User Delete Log');
+  /**
+   * Implements hook_views_data().
+   */
+  public function viewsData() {
+    $data = [];
+    $data['itkdev_user_log'] = [];
+    $data['itkdev_user_log']['table'] = [];
+    $data['itkdev_user_log']['table']['group'] = $this->t('User Delete Log');
     $data['itkdev_user_log']['table']['provider'] = 'itkdev_user_log';
-    $data['itkdev_user_log']['table']['base'] = array(
+    $data['itkdev_user_log']['table']['base'] = [
       'field' => 'user_delete_log_id',
-      'title' => t('User Delete Log'),
-      'help' => t('The User Delete Log Table'),
-    );
+      'title' => $this->t('User Delete Log'),
+      'help' => $this->t('The User Delete Log Table'),
+    ];
 
-    $data['itkdev_user_log']['user_delete_log_id'] = array(
-      'title' => t('User Delete Log ID'),
-      'help' => t('The User Delete Log ID'),
-      'field' => array(
+    $data['itkdev_user_log']['user_delete_log_id'] = [
+      'title' => $this->t('User Delete Log ID'),
+      'help' => $this->t('The User Delete Log ID'),
+      'field' => [
         // ID of field handler plugin to use.
         'id' => 'numeric',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         // ID of sort handler plugin to use.
         'id' => 'standard',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         // ID of filter handler plugin to use.
         'id' => 'numeric',
-      ),
-      'argument' => array(
+      ],
+      'argument' => [
         // ID of argument handler plugin to use.
         'id' => 'numeric',
-      ),
-    );
+      ],
+    ];
 
-    $data['itkdev_user_log']['deleted_user_id'] = array(
-      'title' => t('User ID'),
-      'help' => t('The deleted User ID'),
-      'field' => array(
+    $data['itkdev_user_log']['deleted_user_id'] = [
+      'title' => $this->t('User ID'),
+      'help' => $this->t('The deleted User ID'),
+      'field' => [
         'id' => 'numeric',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         'id' => 'standard',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         'id' => 'numeric',
-      ),
-      'argument' => array(
+      ],
+      'argument' => [
         'id' => 'numeric',
-      ),
-    );
+      ],
+    ];
 
-    $data['itkdev_user_log']['deleted_at'] = array(
-      'title' => t('Deleted At'),
-      'help' => t('The user deletion date'),
-      'field' => array(
+    $data['itkdev_user_log']['deleted_at'] = [
+      'title' => $this->t('Deleted At'),
+      'help' => $this->t('The user deletion date'),
+      'field' => [
         'id' => 'date',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         'id' => 'date',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         'id' => 'date',
-      ),
-    );
+      ],
+    ];
 
-    $data['itkdev_user_log']['deleted_by'] = array(
-      'title' => t('Deleted By'),
-      'help' => t('The user ID of the deleting account'),
-      'field' => array(
+    $data['itkdev_user_log']['deleted_by'] = [
+      'title' => $this->t('Deleted By'),
+      'help' => $this->t('The user ID of the deleting account'),
+      'field' => [
         'id' => 'numeric',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         'id' => 'standard',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         'id' => 'numeric',
-      ),
-      'argument' => array(
+      ],
+      'argument' => [
         'id' => 'numeric',
-      ),
-    );
+      ],
+    ];
 
-    $data['itkdev_user_log']['deleted_user_name'] = array(
-      'title' => t('Deleted User Name'),
-      'help' => t('Name of deleted user.'),
-      'field' => array(
+    $data['itkdev_user_log']['deleted_user_name'] = [
+      'title' => $this->t('Deleted User Name'),
+      'help' => $this->t('Name of deleted user.'),
+      'field' => [
         // ID of field handler plugin to use.
         'id' => 'standard',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         // ID of sort handler plugin to use.
         'id' => 'standard',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         // ID of filter handler plugin to use.
         'id' => 'string',
-      ),
-      'argument' => array(
+      ],
+      'argument' => [
         // ID of argument handler plugin to use.
         'id' => 'string',
-      ),
-    );
+      ],
+    ];
 
-    $data['itkdev_user_log']['deleted_user_mail'] = array(
-      'title' => t('Deleted User Mail'),
-      'help' => t('Mail of deleted user.'),
-      'field' => array(
+    $data['itkdev_user_log']['deleted_user_mail'] = [
+      'title' => $this->t('Deleted User Mail'),
+      'help' => $this->t('Mail of deleted user.'),
+      'field' => [
         // ID of field handler plugin to use.
         'id' => 'standard',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         // ID of sort handler plugin to use.
         'id' => 'standard',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         // ID of filter handler plugin to use.
         'id' => 'string',
-      ),
-      'argument' => array(
+      ],
+      'argument' => [
         // ID of argument handler plugin to use.
         'id' => 'string',
-      ),
-    );
+      ],
+    ];
 
-    $data['itkdev_user_log']['deleted_user'] = array(
-      'title' => t('Deleted User'),
-      'help' => t('The serialized deleted user'),
-      'field' => array(
+    $data['itkdev_user_log']['deleted_user'] = [
+      'title' => $this->t('Deleted User'),
+      'help' => $this->t('The serialized deleted user'),
+      'field' => [
         'id' => 'text',
-      ),
-      'sort' => array(
+      ],
+      'sort' => [
         'id' => 'standard',
-      ),
-      'filter' => array(
+      ],
+      'filter' => [
         'id' => 'numeric',
-      ),
-      'argument' => array(
+      ],
+      'argument' => [
         'id' => 'numeric',
-      ),
-    );
+      ],
+    ];
 
     return $data;
   }
+
 }

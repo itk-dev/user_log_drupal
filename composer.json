@@ -1,10 +1,27 @@
 {
     "name": "itkdev/user_log_drupal",
+    "description": "Drupal module for user logging.",
     "type": "drupal-module",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Jeppe Kuhlmann Andersen",
             "email": "jekua@aarhus.dk"
         }
-    ]
+    ],
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "drupal/coder": "^8.3"
+    },
+    "scripts": {
+        "coding-standards-check/phpcs": [
+            "vendor/bin/phpcs --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-apply/phpcs": [
+            "vendor/bin/phpcbf --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
+        ]
+    }
 }

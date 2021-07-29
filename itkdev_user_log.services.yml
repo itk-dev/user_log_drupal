@@ -1,3 +1,7 @@
 services:
   itkdev_user_log.helper:
     class: Drupal\itkdev_user_log\Helper\Helper
+    arguments:
+      - '@current_user'
+      - '@database'
+      - '@datetime.time'
