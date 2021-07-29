@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Code for module itkdev_user_log
+ * Code for module itkdev_user_log.
  */
 
 use Drupal\Core\Entity\EntityInterface;

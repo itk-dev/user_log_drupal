@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provide views data for itkdev_user_log module
+ * Provide views data for itkdev_user_log module.
  */
 
 /**
