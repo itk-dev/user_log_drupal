@@ -7,7 +7,7 @@ dependencies:
     module:
       - itkdev_user_log
 _core:
-  default_config_hash: 5U6_jNglOZeGBDVSzdMk2N9G6srFd9KtskqArOAqya0
+  default_config_hash: UijofENGZr0HVIFKEfpNTzHKr4L7IztWXwXdU-AMUDo
 id: itkdev_user_log
 label: UserLogView
 module: views
@@ -26,7 +26,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -334,8 +334,33 @@ display:
           suffix: ''
           plugin_id: numeric
       filters: {  }
-      sorts: {  }
-      title: UserLogView
+      sorts:
+        deleted_at:
+          id: deleted_at
+          table: itkdev_user_log
+          field: deleted_at
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: true
+          expose:
+            label: 'Deleted At'
+          granularity: day
+          plugin_id: date
+        deleted_user_id:
+          id: deleted_user_id
+          table: itkdev_user_log
+          field: deleted_user_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: true
+          expose:
+            label: 'Deleted User ID'
+          plugin_id: standard
+      title: 'User Delete Log'
       header: {  }
       footer: {  }
       empty: {  }
@@ -347,6 +372,8 @@ display:
       contexts:
         - 'languages:language_interface'
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
       tags: {  }
   page_1:
     display_plugin: page
@@ -361,4 +388,6 @@ display:
       contexts:
         - 'languages:language_interface'
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
       tags: {  }
