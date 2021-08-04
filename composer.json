@@ -2,7 +2,7 @@
     "name": "itkdev/user_log_drupal",
     "description": "Drupal module for user logging.",
     "type": "drupal-module",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Jeppe Kuhlmann Andersen",
